@@ -1,0 +1,25 @@
+.images{
+    width: 726px;
+    padding: 4px;
+    border: 1px solid #eee;
+}
+.images>.lie{
+    float: left;
+    width: 115px;
+    margin: 3px;
+
+
+}
+.images>.lie>.img_item{
+
+
+
+}
+.images>.lie>.img_item img{
+    width: 100%;
+    cursor: pointer;
+}
+.images>.lie>.img_item:hover{
+    opacity: 0.6;
+}
+

@@ -1,0 +1,35 @@
+<ul id="menu">
+    <li>
+        <a href="#">Info</a>
+
+    </li>
+    <li>
+        <a href="#">Original Works</a>
+        <ul>
+            <li><a href="#">2014.9</a></li>
+            <li><a href="#">2014.10</a></li>
+            <li><a href="#">2014.11</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">Contact</a>
+    </li>
+    <li>
+        <a href="#">Shop</a>
+    </li>
+</ul>
+<script src="{$base_url}/flash/admin/js/tendina.js"></script>
+<script>
+
+
+    $('#menu').tendina({
+        animate: true,
+        speed: 500,
+        openCallback: function($clickedEl) {
+            console.log($clickedEl);
+        },
+        closeCallback: function($clickedEl) {
+            console.log($clickedEl);
+        }
+    });
+</script>
