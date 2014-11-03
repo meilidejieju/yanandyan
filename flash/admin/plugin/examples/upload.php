@@ -9,9 +9,9 @@
  * Contributing: http://www.plupload.com/contributing
  */
 
-#!! IMPORTANT: 
-#!! this file is just an example, it doesn't incorporate any security checks and 
-#!! is not recommended to be used in production environment as it is. Be sure to 
+#!! IMPORTANT:
+#!! this file is just an example, it doesn't incorporate any security checks and
+#!! is not recommended to be used in production environment as it is. Be sure to
 #!! revise it and customize to your needs.
 
 
@@ -21,8 +21,10 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
+header("Content-type:text/html;charset=utf-8");
 
-/* 
+session_start();
+/*
 // Support CORS
 header("Access-Control-Allow-Origin: *");
 // other CORS headers if any...
@@ -33,83 +35,89 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // 5 minutes execution time
 @set_time_limit(5 * 60);
-
+$username = $_SESSION['admin_username']?$_SESSION['admin_username']:'admin';
 // Uncomment this one to fake upload time
 // usleep(5000);
 
 // Settings
 //$targetDir = ini_get("upload_tmp_dir") . DIRECTORY_SEPARATOR . "plupload";
-$targetDir = 'uploads';
+
+
+$targetDir = 'uploads/'.$username.'/';
 $cleanupTargetDir = true; // Remove old files
 $maxFileAge = 5 * 3600; // Temp file age in seconds
 
 
 // Create target dir
 if (!file_exists($targetDir)) {
-	@mkdir($targetDir);
+    @mkdir($targetDir);
 }
 
 // Get a file name
 if (isset($_REQUEST["name"])) {
-	$fileName = $_REQUEST["name"];
+    $fileName =  iconv("UTF-8","GB2312",$_REQUEST["name"]);
+    $fileName = $_REQUEST["name"];
 } elseif (!empty($_FILES)) {
-	$fileName = $_FILES["file"]["name"];
+    $fileName = iconv("UTF-8","GB2312",$_FILES["file"]["name"]);
+    $fileName = $_FILES["file"]["name"];
 } else {
-	$fileName = uniqid("file_");
+    $fileName = uniqid("file_");
 }
-
+file_put_contents('111.txt',$fileName);
 $filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
+$filePath_utf8 = $filePath;
+$filePath = iconv("UTF-8","GB2312",$filePath);
 
 // Chunking might be enabled
 $chunk = isset($_REQUEST["chunk"]) ? intval($_REQUEST["chunk"]) : 0;
 $chunks = isset($_REQUEST["chunks"]) ? intval($_REQUEST["chunks"]) : 0;
 
 
-// Remove old temp files	
+// Remove old temp files
 if ($cleanupTargetDir) {
-	if (!is_dir($targetDir) || !$dir = opendir($targetDir)) {
-		die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": "Failed to open temp directory."}, "id" : "id"}');
-	}
+    if (!is_dir($targetDir) || !$dir = opendir($targetDir)) {
+        die('{"jsonrpc" : "2.0", "error" : {"code": 100, "message": "Failed to open temp directory."}, "id" : "id"}');
+    }
 
-	while (($file = readdir($dir)) !== false) {
-		$tmpfilePath = $targetDir . DIRECTORY_SEPARATOR . $file;
+    while (($file = readdir($dir)) !== false) {
+        $tmpfilePath = $targetDir . DIRECTORY_SEPARATOR . $file;
 
-		// If temp file is current file proceed to the next
-		if ($tmpfilePath == "{$filePath}.part") {
-			continue;
-		}
+        // If temp file is current file proceed to the next
+        if ($tmpfilePath == "{$filePath}.part") {
+            continue;
+        }
 
-		// Remove temp file if it is older than the max age and is not the current file
-		if (preg_match('/\.part$/', $file) && (filemtime($tmpfilePath) < time() - $maxFileAge)) {
-			@unlink($tmpfilePath);
-		}
-	}
-	closedir($dir);
-}	
+        // Remove temp file if it is older than the max age and is not the current file
+        if (preg_match('/\.part$/', $file) && (filemtime($tmpfilePath) < time() - $maxFileAge)) {
+            @unlink($tmpfilePath);
+        }
+    }
+    closedir($dir);
+}
 
 
 // Open temp file
 if (!$out = @fopen("{$filePath}.part", $chunks ? "ab" : "wb")) {
-	die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
+    die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
 }
 
 if (!empty($_FILES)) {
-	if ($_FILES["file"]["error"] || !is_uploaded_file($_FILES["file"]["tmp_name"])) {
-		die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
-	}
+    if ($_FILES["file"]["error"] || !is_uploaded_file($_FILES["file"]["tmp_name"])) {
+        die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
+    }
 
-	// Read binary input stream and append it to temp file
-	if (!$in = @fopen($_FILES["file"]["tmp_name"], "rb")) {
-		die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-	}
-} else {	
-	if (!$in = @fopen("php://input", "rb")) {
-		die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
-	}
+    // Read binary input stream and append it to temp file
+    if (!$in = @fopen($_FILES["file"]["tmp_name"], "rb")) {
+        die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+    }
+} else {
+    if (!$in = @fopen("php://input", "rb")) {
+        die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
+    }
 }
 
 while ($buff = fread($in, 4096)) {
-	fwrite($out, $buff);
+    fwrite($out, $buff);
 }
 
 @fclose($out);
@@ -117,9 +125,22 @@ while ($buff = fread($in, 4096)) {
 
 // Check if file has been uploaded
 if (!$chunks || $chunk == $chunks - 1) {
-	// Strip the temp .part suffix off 
-	rename("{$filePath}.part", $filePath);
+    // Strip the temp .part suffix off
+    rename("{$filePath}.part", $filePath);
 }
+
+//插入数据库
+$con = mysql_connect("localhost","root","123123");
+if (!$con)
+{
+    die('Could not connect: ' . mysql_error());
+}
+mysql_select_db('yanandyan',$con);
+mysql_set_charset('utf8');
+$uid=$_SESSION['admin_uid'];
+$sql = sprintf("insert into blog_picture_center (picurl,post_time,author,belong_uid) values ('%s',%d,'%s',%d)",$filePath_utf8,time(),$username,$uid);
+$q=mysql_query($sql);
+
 
 // Return Success JSON-RPC response
 die('{"jsonrpc" : "2.0", "result" : null, "id" : "id"}');

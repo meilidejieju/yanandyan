@@ -1,18 +1,18 @@
 <ul id="menu">
     <li>
-        <a href="#">Info</a>
-
+        <a class="{$curinfo}" href="{$base_url}/index.php/Index/myinfo/cur/info">Info</a>
     </li>
-    <li>
-        <a href="#">Original Works</a>
-        <ul>
-            <li><a href="#">2014.9</a></li>
-            <li><a href="#">2014.10</a></li>
-            <li><a href="#">2014.11</a></li>
+    <li class="{$mywork_menu_class}">
+        <a href="#" >Original Works</a>
+        <ul class="mywork">
+            <foreach name="datemenu" item="vo">
+                <li><a class="{$vo.cur}" href="{$base_url}/index.php/Index/mywork/starttime/{$vo.starttime}/endtime/{$vo.endtime}/cur/{$vo.curvalue}">{$vo.menu_name}</a></li>
+            </foreach>
+
         </ul>
     </li>
     <li>
-        <a href="#">Contact</a>
+        <a class="{$curcontact}" href="{$base_url}/index.php/Index/mycontact/cur/contact">Contact</a>
     </li>
     <li>
         <a href="#">Shop</a>
@@ -32,4 +32,17 @@
             console.log($clickedEl);
         }
     });
+    $(document).ready(function(){
+        if("{$act}"=='mywork'){
+            $(".mywork").css("display","block");
+        }
+
+        $(window).scroll(function(){
+            if($(document).scrollTop()>30){
+
+            }
+        })
+    });
+
+
 </script>

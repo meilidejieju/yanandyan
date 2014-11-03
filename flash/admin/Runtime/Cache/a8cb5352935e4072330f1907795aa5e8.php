@@ -8,6 +8,7 @@
     <link href="<?php echo ($base_url); ?>/flash/admin/css/main.css" type="text/css" rel="stylesheet">
     <script src="<?php echo ($base_url); ?>/flash/admin/js/jquery.1.4.2.js" type="text/javascript"></script>
     <script type="text/javascript" src="<?php echo ($base_url); ?>/flash/admin/js/base.js"></script>
+
 </head>
 
         <body>
@@ -105,7 +106,7 @@
             </div>
         </div>
         <!--缓存-->
-        <input id = "img_url" value=""/>
+        <input id = "img_url" value="" type="hidden"/>
         </body>
 
 </html>

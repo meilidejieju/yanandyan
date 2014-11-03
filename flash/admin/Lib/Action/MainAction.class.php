@@ -99,4 +99,118 @@ class MainAction extends Action {
     }
 
 
+
+
+    public function piccenter(){
+        $this->getPositon();
+        $this->display();
+        
+    }
+
+
+
+    public function uploadpic(){
+        $this->getPositon();
+        $Picturedata = M('blog_picture_center');
+        $Picture = D('Picture');
+        $depart = session('admin_uid');
+        $p=$_GET['p']?$_GET['p']:1;
+        $item = 3;
+
+        //获得图片空间总条数
+        $total_items=$Picturedata->where("belong_uid='".$depart."'")->count();
+        //获得相应的条数
+        $img_arr = $Picture-> getMyPics($depart,$p,$item);
+        //获得分页
+        require_once ROOT_PATH.'/flash/common/commonfunctions.class.php';
+        $commonfunctions = new commonfunctions();
+        $pagebar = $commonfunctions->page($total_items,$item,BASE_URL.'/admin.php/Mainajax/picturecenter/p/',$p,'#picturecenterbox');
+
+        $this->assign("pagebar",$pagebar);
+        $this->assign("imagelist",$img_arr);
+
+
+        $this->display();
+    }
+
+
+
+    public function mywork(){
+        $this->getPositon();
+
+        $Works = D('Works');
+        $Myworksdata = M('blog_myworks');
+        $p=$_GET['p']?$_GET['p']:1;
+        $item = 5;
+        $total_items=$Myworksdata->where("uid='".session('admin_uid')."'")->count();
+        //获得相应的条数
+        $works_arr = $Works-> getMyworks('uid='.session('admin_uid'),($p-1)*$item.','.$item);
+
+        //获得分页
+        require_once ROOT_PATH.'/flash/common/commonfunctions.class.php';
+        $commonfunctions = new commonfunctions();
+        $pagebar = $commonfunctions->page($total_items,$item,BASE_URL.'/admin.php/Mainajax/mywork/p/',$p,'#myworks');
+
+        $this->assign("pagebar",$pagebar);
+        $this->assign("works_arr",$works_arr);
+
+
+        $this->display();
+    }
+    public function addmywork(){
+        $this->getPositon();
+
+        $Picturedata = M('blog_picture_center');
+        $Picture = D('Picture');
+        $depart = session('admin_uid');
+        $p=$_GET['p']?$_GET['p']:1;
+        $item = 3;
+
+        //获得图片空间总条数
+        $total_items=$Picturedata->where("belong_uid='".$depart."'")->count();
+        //获得相应的条数
+        $img_arr = $Picture-> getMyPics($depart,$p,$item);
+        //获得分页
+        require_once ROOT_PATH.'/flash/common/commonfunctions.class.php';
+        $commonfunctions = new commonfunctions();
+        $pagebar = $commonfunctions->page($total_items,$item,BASE_URL.'/admin.php/Mainajax/picturecenter/p/',$p,'#picturecenterbox');
+
+        $this->assign("pagebar",$pagebar);
+        $this->assign("imagelist",$img_arr);
+
+        $this->assign("act",'addMywork');
+        $this->assign("time",gmdate("Y-m-d H:i:s",time()+8*3600));
+        $this->assign("minpic_display",'none');
+        $this->display();
+    }
+                    
+
+    public function myinfo(){
+        $this->getPositon();
+
+        $Myinfo = M('blog_myinfo');
+        $info = $Myinfo->where('uid='.session('admin_uid'))->find();
+        $this->assign('last_time','上次修改时间'.gmdate('Y-m-d H:i:s',$info['time']+8*3600));
+        $this->assign('content',$info['content']);
+        $this->display();
+    }
+
+                    
+
+    public function myshop(){
+        $this->getPositon();
+        $this->display();
+    }
+    /*
+     * 我的联系方式
+     * */
+    public function mycontact(){
+        $this->getPositon();
+
+        $Myinfo = M('blog_mycontact');
+        $info = $Myinfo->where('uid='.session('admin_uid'))->find();
+        $this->assign('last_time','上次修改时间'.gmdate('Y-m-d H:i:s',$info['time']+8*3600));
+        $this->assign('content',$info['content']);
+        $this->display();
+    }
 }

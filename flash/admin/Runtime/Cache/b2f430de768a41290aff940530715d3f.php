@@ -8,6 +8,7 @@
     <link href="<?php echo ($base_url); ?>/flash/admin/css/main.css" type="text/css" rel="stylesheet">
     <script src="<?php echo ($base_url); ?>/flash/admin/js/jquery.1.4.2.js" type="text/javascript"></script>
     <script type="text/javascript" src="<?php echo ($base_url); ?>/flash/admin/js/base.js"></script>
+
 </head>
 
         <body>
@@ -24,7 +25,7 @@
 
         </script>
         <div class="background"></div>
-        <form method="post" action="./admin.php/Index/login"
+        <form method="post" action="./admin.php/Index/login" id="login_form">
         <div class="login">
             <div class="login_info">
                 <div class="item">
@@ -47,7 +48,18 @@
                 <div class="clear"></div>
             </div>
             <div class="login_area">
-               <input type="button" class="login_bt" onclick="javascript:this.form.submit()" name = "login_bt" value="<?php echo ($langZh["login"]); ?>"/>
+               <input style="display: none" type="button" class="login_bt" onclick="javascript:this.form.submit()" name = "login_bt" value="<?php echo ($langZh["login"]); ?>"/>
+                <script>
+                    $(document).ready(function(){
+                        $(document).keypress(function(event){
+                            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+                            if(keycode == '13'){
+                                $("#login_form").submit();
+                            }
+                        })
+                    })
+                </script>
             </div>
 
 

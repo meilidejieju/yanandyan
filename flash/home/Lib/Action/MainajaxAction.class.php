@@ -35,5 +35,28 @@ class MainajaxAction extends Action {
      //   echo
     }
 
+    function pictureBox(){
+
+        $works = D('Works');
+
+        $starttime = strtotime($_GET['starttime']);
+        $endtime = strtotime($_GET['endtime']);
+        if($starttime){
+            $where .= ' post_time >='.$starttime;
+        }
+        if($endtime){
+            $where.= ' and post_time<='.$endtime;
+        }
+        $commonfunctions = new commonfunctions();
+        $p = $_GET['p']?$_GET['p']:2;
+        $items =2;
+
+        $myworks = $works->getMyworks($where,' '.$p*$items.','.$items);
+       echo json_encode($myworks);
+
+
+
+    }
+
 
 }

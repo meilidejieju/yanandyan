@@ -31,3 +31,20 @@
 .arrow:active{
     color: red;
 }
+.del,.edit{
+    padding: 2px 4px;
+    background: #555;
+    color: #fff;
+    font-size: 12px;
+
+}
+.del:hover,.edit:hover{
+     background: #FF6600;
+
+ }
+
+.del:active,.edit:active{
+    background: red;
+    font-size: 10px;
+
+}

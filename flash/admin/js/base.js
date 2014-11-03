@@ -30,21 +30,27 @@ function moveBg(ele,mode){
 * 获得内容
 * */
 
-function getContent($url,position,changge_class_name){
-    $('#maincontent').html("");
+function getContent($url,position,changge_class_name,data_out){
+    var data = {"data":1,"position":position};
+    if(data_out){
+        $.extend(data,data_out);
+    }
+
+    if(!changge_class_name){
+        changge_class_name='#maincontent';
+    }
+    $(changge_class_name).html("");
     $(".loading").css("display","");
     $.ajax({
         url:$url,
         type: "POST",
-        data:{"data":1,"position":position},
+        data:data,
         dataType:'text',
         success:function(e){
             //  alert(e)
            $(".loading").css("display","none");
           //  setTimeout("",2000);
             $(".position").text(position);
-
-                changge_class_name='#maincontent';
 
             $(changge_class_name).html(e);
         },

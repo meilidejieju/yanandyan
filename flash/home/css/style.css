@@ -5,12 +5,23 @@
     font-family: '微软雅黑';
     list-style: none;
     text-decoration: none;
+    color: #666666;
+    font-size: 12px;
+    line-height: 22px;
+    margin: 0;
+    padding: 0;
+}
+a:hover{
+    color: #ff6600;
+}
+.cur{
+    color: #ff6600;
 }
 body,div,ul,li{
     padding: 0;margin: 0;
 }
 .blank{height: 20px;}
-.background{width: 100%;position: absolute;left: 0;top: 0;z-index: -999;height: 100%;overflow: hidden;background: #F0F0F0}
+.background{width: 100%;position: fixed;left: 0;top: 0;z-index: -999;height: 100%;overflow: hidden;background: #F0F0F0}
 .header{
     padding: 10px;background: #aaa;
 }
@@ -19,7 +30,7 @@ body,div,ul,li{
 ;
 }
 .centerbox{
-    position: fixed;top: 30px;width: 1000px;height: 90%;
+   margin-top: 30px;width: 1000px;
 }
 .boxcenter{
     display: block;
@@ -98,7 +109,7 @@ body,div,ul,li{
     padding: 10px 0;
 }
 .right_content{
-    width: 750px;float: left;margin-left: 20px;
+    width: 750px;float: right;margin-left: 20px;
 }
 .right_content_left{
     width: 550px;float: left
